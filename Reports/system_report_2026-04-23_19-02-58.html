@@ -1,0 +1,100 @@
+﻿<html>
+<head>
+<meta charset="UTF-8">
+<title>Windows Client Health Check</title>
+<style>
+body {
+    font-family: Arial;
+    background-color: #f4f6f8;
+    padding: 30px;
+}
+
+h1 {
+    color: #003366;
+}
+
+h2 {
+    color: #003366;
+    margin-top: 30px;
+}
+
+.box {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    width: 760px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+
+.ok {
+    color: green;
+    font-weight: bold;
+}
+
+.warning {
+    color: darkorange;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #d0d7de;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #e9eef5;
+}
+</style>
+</head>
+
+<body>
+<div class="box">
+<h1>Windows Client Health Check</h1>
+
+<p><b>Erstellt am:</b> 04/23/2026 19:03:00</p>
+
+<h2>SystemÃ¼bersicht</h2>
+<p><b>Computer:</b> CC-NXB1BEG00541</p>
+<p><b>Benutzer:</b> CC-Student</p>
+<p><b>Betriebssystem:</b> Microsoft Windows 10 Education</p>
+<p><b>RAM:</b> 15.7 GB</p>
+<p><b>DatentrÃ¤ger gesamt:</b> 471.56 GB</p>
+<p><b>DatentrÃ¤ger frei:</b> 346.6 GB</p>
+<p><b>Speicherstatus:</b> <span class="ok">OK</span></p>
+<p><b>Letzter Start:</b> 04/23/2026 18:16:25</p>
+<p><b>IP-Adresse:</b> 192.168.56.1</p>
+
+<h2>Erreichbarkeit</h2>
+<p><b>Internetverbindung:</b> <span class="ok">OK</span></p>
+<p><b>Interner Zielhost (192.168.56.1):</b> <span class="ok">Erreichbar</span></p>
+<p><b>Netzwerkfreigabe (C:\):</b> <span class="ok">Erreichbar</span></p>
+
+<h2>Systembewertung</h2>
+<p><b>CPU-Auslastung:</b> 54 %</p>
+<p><b>CPU-Status:</b> <span class="warning">ErhÃ¶ht</span></p>
+
+<h2>GeprÃ¼fte Dienste</h2>
+<table>
+    <tr>
+        <th>Dienst</th>
+        <th>Status</th>
+        <th>Bewertung</th>
+    </tr>
+    <tr><td>Spooler</td><td>Running</td><td class='ok'>OK</td></tr><tr><td>wuauserv</td><td>Stopped</td><td class='error'>Fehler</td></tr><tr><td>WinDefend</td><td>Running</td><td class='ok'>OK</td></tr><tr><td>LanmanWorkstation</td><td>Running</td><td class='ok'>OK</td></tr>
+</table>
+
+</div>
+</body>
+</html>

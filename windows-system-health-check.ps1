@@ -1,12 +1,12 @@
-# Windows Client Health Check
+﻿# Windows Client Health Check
 # Autor: Jennifer Rösner
 # Beschreibung:
-# Dieses Skript prüft zentrale Systemzustände eines Windows Arbeitsplatzes
-# und erstellt einen HTML Bericht für den Einsatz im Klinikumfeld.
+# Dieses Skript prüft zentrale Systemzustände eines Windows-Arbeitsplatzes
+# und erstellt einen HTML-Bericht für den Einsatz im Klinikumfeld.
 
 $reportFolder = ".\reports"
 
-if (!(Test-Path $reportFolder)) {
+if (-not (Test-Path $reportFolder)) {
     New-Item -ItemType Directory -Path $reportFolder | Out-Null
 }
 
@@ -31,10 +31,10 @@ $freeDiskGB = [math]::Round($disk.FreeSpace / 1GB, 2)
 $lastBoot = $os.LastBootUpTime
 
 $ipv4 = (Get-NetIPAddress -AddressFamily IPv4 |
-    Where-Object { $_.IPAddress -ne "127.0.0.1" } |
+    Where-Object { $_.IPAddress -ne "127.0.0.1" -and $_.IPAddress -notlike "169.254.*" } |
     Select-Object -First 1).IPAddress
 
-# Externe und interne Erreichbarkeit prüfen
+# Erreichbarkeit prüfen
 $internetPing = Test-Connection 8.8.8.8 -Count 1 -Quiet -ErrorAction SilentlyContinue
 $internalPing = Test-Connection $internalTarget -Count 1 -Quiet -ErrorAction SilentlyContinue
 
@@ -78,7 +78,7 @@ if ($cpuLoad -ge 80) {
     $cpuClass = "ok"
 }
 
-# Freigabe prüfen
+# Freigabe / Pfad prüfen
 if (Test-Path $sharePath) {
     $shareStatus = "Erreichbar"
     $shareClass = "ok"
@@ -96,22 +96,22 @@ foreach ($serviceName in $servicesToCheck) {
 
     if ($null -eq $service) {
         $serviceObjects += [PSCustomObject]@{
-            Dienst = $serviceName
-            Status = "Nicht gefunden"
+            Dienst    = $serviceName
+            Status    = "Nicht gefunden"
             Bewertung = "Warnung"
         }
     }
     elseif ($service.Status -eq "Running") {
         $serviceObjects += [PSCustomObject]@{
-            Dienst = $serviceName
-            Status = "Running"
+            Dienst    = $serviceName
+            Status    = "Running"
             Bewertung = "OK"
         }
     }
     else {
         $serviceObjects += [PSCustomObject]@{
-            Dienst = $serviceName
-            Status = $service.Status
+            Dienst    = $serviceName
+            Status    = $service.Status
             Bewertung = "Fehler"
         }
     }
@@ -143,16 +143,13 @@ body {
     background-color: #f4f6f8;
     padding: 30px;
 }
-
 h1 {
     color: #003366;
 }
-
 h2 {
     color: #003366;
     margin-top: 30px;
 }
-
 .box {
     background: white;
     padding: 24px;
@@ -160,44 +157,36 @@ h2 {
     width: 760px;
     box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
 }
-
 .ok {
     color: green;
     font-weight: bold;
 }
-
 .warning {
     color: darkorange;
     font-weight: bold;
 }
-
 .error {
     color: red;
     font-weight: bold;
 }
-
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
 }
-
 th, td {
     border: 1px solid #d0d7de;
     padding: 10px;
     text-align: left;
 }
-
 th {
     background-color: #e9eef5;
 }
 </style>
 </head>
-
 <body>
 <div class="box">
 <h1>Windows Client Health Check</h1>
-
 <p><b>Erstellt am:</b> $(Get-Date)</p>
 
 <h2>Systemübersicht</h2>
@@ -214,7 +203,7 @@ th {
 <h2>Erreichbarkeit</h2>
 <p><b>Internetverbindung:</b> <span class="$networkClass">$networkStatus</span></p>
 <p><b>Interner Zielhost ($internalTarget):</b> <span class="$internalTargetClass">$internalTargetStatus</span></p>
-<p><b>Netzwerkfreigabe ($sharePath):</b> <span class="$shareClass">$shareStatus</span></p>
+<p><b>Netzwerkpfad ($sharePath):</b> <span class="$shareClass">$shareStatus</span></p>
 
 <h2>Systembewertung</h2>
 <p><b>CPU-Auslastung:</b> $cpuLoad %</p>
@@ -229,12 +218,18 @@ th {
     </tr>
     $serviceRows
 </table>
-
 </div>
 </body>
 </html>
 "@
 
-$html | Out-File $reportPath -Encoding UTF8
-
-Write-Host "Report erstellt: $reportPath"
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText($reportPath, $html, $utf8NoBom)
+try {
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($reportPath, $html, $utf8NoBom)
+    Write-Host "Report erstellt: $reportPath"
+}
+catch {
+    Write-Error "Fehler beim Schreiben des Reports: $($_.Exception.Message)"
+}
