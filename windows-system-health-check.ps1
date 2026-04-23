@@ -39,6 +39,14 @@ if ($ping) {
     $networkClass = "error"
 }
 
+if ($freeDiskGB -lt 20) {
+    $diskStatus = "Wenig Speicher"
+    $diskClass = "error"
+} else {
+    $diskStatus = "OK"
+    $diskClass = "ok"
+}
+
 $html = @"
 <html>
 <head>
@@ -84,6 +92,7 @@ h1 {
 <p><b>RAM:</b> $totalRAMGB GB</p>
 <p><b>Disk gesamt:</b> $totalDiskGB GB</p>
 <p><b>Disk frei:</b> $freeDiskGB GB</p>
+<p><b>Speicherstatus:</b> <span class="$diskClass">$diskStatus</span></p>
 <p><b>Letzter Start:</b> $lastBoot</p>
 <p><b>IP:</b> $ipv4</p>
 <p><b>Netzwerk:</b> <span class="$networkClass">$networkStatus</span></p>
