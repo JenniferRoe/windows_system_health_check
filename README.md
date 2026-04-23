@@ -2,28 +2,78 @@
 
 ## Projektbeschreibung
 
-Dieses Projekt ist ein PowerShell Script zur automatisierten Überprüfung wichtiger Systeminformationen auf einem Windows Rechner.
+Dieses Projekt ist ein PowerShell-Skript zur automatisierten Analyse des Systemzustands eines Windows-Clients.
 
-Ziel ist es, schnell einen Überblick über den Zustand eines Systems zu erhalten und typische Prüfaufgaben aus der IT Administration zu vereinfachen.
+Das Skript wurde entwickelt, um typische Aufgaben aus dem IT-Support und der Systemadministration praktisch umzusetzen. Es sammelt relevante Systemdaten, bewertet diese und stellt die Ergebnisse strukturiert in einem Report dar.
+
+Ziel ist es, schnell einen Überblick über den Zustand eines Systems zu erhalten.
+
+---
 
 ## Funktionen
 
-- Auslesen von Computername und Benutzername
-- Anzeige des Betriebssystems
-- Ermittlung von RAM und freiem Festplattenspeicher
-- Anzeige der IP Adresse
-- Prüfung der Netzwerkverbindung
-- Erstellung eines HTML Reports
+- Ermittlung von Systeminformationen
+  - Computername
+  - Benutzername
+  - Betriebssystem
 
-## Verwendete Technologien
+- Analyse von Systemressourcen
+  - RAM
+  - Festplattenspeicher (gesamt und frei)
+  - CPU-Auslastung
+
+- Netzwerkprüfung
+  - Internetverbindung (Ping-Test)
+  - Erreichbarkeit eines internen Zielsystems
+
+- Überprüfung wichtiger Windows-Dienste
+
+- Bewertung der Ergebnisse in:
+  - OK
+  - Warnung
+  - Fehler
+
+- Export der Ergebnisse als:
+  - HTML-Report (visuelle Übersicht)
+  - CSV-Datei (Weiterverarbeitung möglich)
+
+---
+
+## Technologien
 
 - PowerShell
-- HTML
-- CSS
-- Windows Systembefehle
+- WMI / CIM (Systemabfragen)
+- HTML / CSS (Reporting)
+- Windows Systemdienste
+
+---
 
 ## Anwendung
 
 ```powershell
 .\windows-system-health-check.ps1
-```
+
+##Projektstruktur
+
+windows-system-health-check/
+│
+├── windows-system-health-check.ps1
+├── reports/
+│   ├── system_report_*.html
+│   └── system_report_*.csv
+└── README.md
+
+Beispielausgabe
+
+Das Skript erstellt einen HTML-Report mit einer strukturierten Übersicht aller geprüften Bereiche:
+
+Systeminformationen
+Netzwerkstatus
+Speicher und CPU
+Dienststatus
+
+Zusätzlich wird eine CSV-Datei erzeugt, die für weitere Auswertungen genutzt werden kann.
+
+Hinweis
+
+Dieses Projekt dient Demonstrationszwecken und ist nicht für den produktiven Einsatz in sensiblen Umgebungen vorgesehen.
