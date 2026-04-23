@@ -1,4 +1,8 @@
-# System Health Check für Windows
+```powershell
+# Windows System Health Check
+# Autor: Jennifer Rösner
+# Beschreibung:
+# Dieses Script prüft Systeminformationen und erstellt einen HTML Report.
 
 $reportFolder = ".\reports"
 
@@ -30,8 +34,10 @@ $ping = Test-Connection 8.8.8.8 -Count 1 -Quiet
 
 if ($ping) {
     $networkStatus = "OK"
+    $networkClass = "ok"
 } else {
     $networkStatus = "Fehler"
+    $networkClass = "error"
 }
 
 $html = @"
@@ -81,14 +87,13 @@ h1 {
 <p><b>Disk frei:</b> $freeDiskGB GB</p>
 <p><b>Letzter Start:</b> $lastBoot</p>
 <p><b>IP:</b> $ipv4</p>
-
-<p><b>Netzwerk:</b> <span class="$networkStatus">$networkStatus</span></p>
+<p><b>Netzwerk:</b> <span class="$networkClass">$networkStatus</span></p>
 
 </div>
 </body>
 </html>
 "@
 
-$html | Out-File $reportPath
+$html | Out-File $reportPath -Encoding UTF8
 
 Write-Host "Report erstellt: $reportPath"
