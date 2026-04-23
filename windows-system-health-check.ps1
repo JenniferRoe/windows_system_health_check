@@ -1,4 +1,3 @@
-```powershell
 # Windows System Health Check
 # Autor: Jennifer Rösner
 # Beschreibung:
